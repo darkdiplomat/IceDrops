@@ -2,7 +2,7 @@ import java.util.logging.Logger;
 
 public class IceDrops extends Plugin{
 	String name = "IceDrops";
-	String version = "1.1";
+	String version = "1.2";
 	String author = "Darkdiplomat";
 	static Logger log = Logger.getLogger("Minecraft");
   

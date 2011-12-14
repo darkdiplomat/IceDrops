@@ -5,32 +5,37 @@ public class IceDropsListener extends PluginListener{
 		if (block.getType() == 79) {
 			boolean rperm = false, c2perm = false, cperm = false;
 			Plugin Realms = null, C2 = null, Cuboid = null;
+			if (etc.getLoader().getPlugin("Realms")!=null){
+				if (etc.getLoader().getPlugin("Realms").isEnabled()) {
+					rperm = (Boolean)etc.getLoader().callCustomHook("Realms-PermissionCheck", new Object[] {"destroy", player, block});
+					Realms = etc.getLoader().getPlugin("Realms");
+				}
+			}
+			if (etc.getLoader().getPlugin("Cuboids2") != null){
+				if (etc.getLoader().getPlugin("Cuboids2").isEnabled()){
+					c2perm = (Boolean)etc.getLoader().callCustomHook("CuboidAPI", new Object[] {player, block, "CAN_MODIFY"});
+					C2 = etc.getLoader().getPlugin("Cuboids2");
+				}
+			}
+			if (etc.getLoader().getPlugin("CuboidPlugin") != null){
+				if (etc.getLoader().getPlugin("CuboidPlugin").isEnabled()){
+					cperm = (Boolean)etc.getLoader().callCustomHook("CuboidPlugin-PermissionCheck", new Object[] {player, block});
+					Cuboid = etc.getLoader().getPlugin("CuboidPlugin");
+				}
+			}
 			if (player.canUseCommand("/icedrops")) {
-				if (etc.getLoader().getPlugin("Realms")!=null){
-					if (etc.getLoader().getPlugin("Realms").isEnabled()) {
-						rperm = (Boolean)etc.getLoader().callCustomHook("Realms-PermissionCheck", new Object[] {"destroy", player, block});
-						Realms = etc.getLoader().getPlugin("Realms");
-					}
-				}
-				if (etc.getLoader().getPlugin("Cuboids2") != null){
-					if (etc.getLoader().getPlugin("Cuboids2").isEnabled()){
-						c2perm = (Boolean)etc.getLoader().callCustomHook("CuboidAPI", new Object[] {player, block, "CAN_MODIFY"});
-						C2 = etc.getLoader().getPlugin("Cuboids2");
-					}
-				}
-				if (etc.getLoader().getPlugin("CuboidPlugin") != null){
-					if (etc.getLoader().getPlugin("CuboidPlugin").isEnabled()){
-						cperm = (Boolean)etc.getLoader().callCustomHook("CuboidPlugin-PermissionCheck", new Object[] {player, block});
-						Cuboid = etc.getLoader().getPlugin("CuboidPlugin");
-					}
-				}
 				if(RequireTool){
 					if(isTool(player.getItemInHand())){
 						if ((rperm) || (c2perm) || (cperm)){
 							drop(block);
 							return true;
-						}else if(Realms == null && C2 == null && Cuboid == null){ 
+						}else if(Realms == null && C2 == null && Cuboid == null){
 							drop(block);
+							return true;
+						}
+						else if(!SpawnWater){
+							block.setType(0);
+							block.update();
 							return true;
 						}
 					}
@@ -48,11 +53,27 @@ public class IceDropsListener extends PluginListener{
 						drop(block);
 						return true;
 					}
+					else if(!SpawnWater){
+						block.setType(0);
+						block.update();
+						return true;
+					}
 				}
-			}else if (!SpawnWater){
-				block.setType(0);
-				block.update();
-				return true;
+			}
+			else{
+				if ((rperm) || (c2perm) || (cperm)){
+					if(!SpawnWater){
+						block.setType(0);
+						block.update();
+						return true;
+					}
+				}else if(Realms == null && C2 == null && Cuboid == null){
+					if(!SpawnWater){
+						block.setType(0);
+						block.update();
+						return true;
+					}
+				}
 			}
 		}
 		return false;
@@ -64,11 +85,13 @@ public class IceDropsListener extends PluginListener{
 		double dropIceChance = IceDropsProps.getIceDrops();
 		if ((drops <= dropIceChance) && (SpawnWater)) {
 			etc.getServer().getWorld(0).dropItem(block.getX(), block.getY(), block.getZ(), 79, 1, 0);
-		}if ((drops <= dropIceChance) && (!SpawnWater)) {
+		}
+		else if ((drops <= dropIceChance) && (!SpawnWater)) {
 			etc.getServer().getWorld(0).dropItem(block.getX(), block.getY(), block.getZ(), 79, 1, 0);
 			block.setType(0);
 			block.update();
-		}if (!SpawnWater) {
+		}
+		else if (!SpawnWater) {
 			block.setType(0);
 			block.update();
 		}
