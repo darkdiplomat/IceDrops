@@ -7,14 +7,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class IceDropsProps{
-	private static String INIFILE = "plugins/config/IceDrops/IceDropsConfig.ini";
-	static Logger log = Logger.getLogger("Minecraft");
-	static String IceDropsChance = "0.05";
-	static String SpawnWater = "false";
-	static String RequireTool = "false";
-	static String ToolIds = "257,270,274,278,285";
+	public IceDropsProps(){
+		loadIni();
+	}
+	
+	private String INIFILE = "plugins/config/IceDrops/IceDropsConfig.ini";
+	private Logger log = Logger.getLogger("Minecraft");
+	private String IceDropsChance = "0.05";
+	private String SpawnWater = "false";
+	private String RequireTool = "false";
+	private String ToolIds = "257,270,274,278,285";
 
-	public static double getIceDrops() {
+	public double getIceDrops() {
 		double IceDrops = 0.05D;
 		try {
 			IceDrops = Double.parseDouble(IceDropsChance);
@@ -25,7 +29,7 @@ public class IceDropsProps{
 		return IceDrops;
 	}
 
-	public static boolean getNoWater() {
+	public boolean getNoWater() {
 		boolean NoWater = true;
 		try {
 			NoWater = Boolean.parseBoolean(SpawnWater);
@@ -36,11 +40,11 @@ public class IceDropsProps{
 		return NoWater;
 	}
   
-	public static String getToolIds(){
+	public String getToolIds(){
 		return ToolIds;
 	}
   
-	public static boolean getRequireTool(){
+	public boolean getRequireTool(){
 		boolean Require = false;
 		try{
 			Require = Boolean.parseBoolean(RequireTool);
@@ -51,7 +55,7 @@ public class IceDropsProps{
 		return Require;
 	}
 
-	public static void loadIni() {
+	private void loadIni() {
 		File inifile = new File(INIFILE);
 		if (inifile.exists()){
 			try {
@@ -71,7 +75,7 @@ public class IceDropsProps{
 		}
 	}
 
-	public static void createIni() {
+	private void createIni() {
 		File inifile = new File(INIFILE);
 		try {
 			inifile.getParentFile().mkdirs();

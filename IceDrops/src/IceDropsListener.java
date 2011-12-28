@@ -1,7 +1,12 @@
 public class IceDropsListener extends PluginListener{
+	IceDropsProps ICP;
+	public IceDropsListener(IceDropsProps ICP){
+		this.ICP = ICP;
+	}
+	
 	public boolean onBlockBreak(Player player, Block block){
-		boolean SpawnWater = IceDropsProps.getNoWater();
-		boolean RequireTool = IceDropsProps.getRequireTool();
+		boolean SpawnWater = ICP.getNoWater();
+		boolean RequireTool = ICP.getRequireTool();
 		if (block.getType() == 79) {
 			boolean rperm = false, c2perm = false, cperm = false;
 			Plugin Realms = null, C2 = null, Cuboid = null;
@@ -28,50 +33,37 @@ public class IceDropsListener extends PluginListener{
 					if(isTool(player.getItemInHand())){
 						if ((rperm) || (c2perm) || (cperm)){
 							drop(block);
-							return true;
-						}else if(Realms == null && C2 == null && Cuboid == null){
+						}else if((Realms == null) && (C2 == null) && (Cuboid == null)){
 							drop(block);
-							return true;
-						}
-						else if(!SpawnWater){
-							block.setType(0);
-							block.update();
-							return true;
 						}
 					}
 					else if(!SpawnWater){
-						block.setType(0);
-						block.update();
-						return true;
+						if ((rperm) || (c2perm) || (cperm)){
+							block.setType(0);
+							block.update();
+						}
+						else if((Realms == null) && (C2 == null) && (Cuboid == null)){
+							block.setType(0);
+							block.update();
+						}
 					}
 				}
 				else{
 					if ((rperm) || (c2perm) || (cperm)){
 						drop(block);
-						return true;
 					}else if(Realms == null && C2 == null && Cuboid == null){
 						drop(block);
-						return true;
-					}
-					else if(!SpawnWater){
-						block.setType(0);
-						block.update();
-						return true;
 					}
 				}
 			}
 			else{
-				if ((rperm) || (c2perm) || (cperm)){
-					if(!SpawnWater){
+				if(!SpawnWater){
+					if ((rperm) || (c2perm) || (cperm)){
 						block.setType(0);
 						block.update();
-						return true;
-					}
-				}else if(Realms == null && C2 == null && Cuboid == null){
-					if(!SpawnWater){
+					}else if(Realms == null && C2 == null && Cuboid == null){
 						block.setType(0);
 						block.update();
-						return true;
 					}
 				}
 			}
@@ -81,8 +73,8 @@ public class IceDropsListener extends PluginListener{
 	
 	public void drop(Block block){
 		double drops = Math.random();
-		boolean SpawnWater = IceDropsProps.getNoWater();
-		double dropIceChance = IceDropsProps.getIceDrops();
+		boolean SpawnWater = ICP.getNoWater();
+		double dropIceChance = ICP.getIceDrops();
 		if ((drops <= dropIceChance) && (SpawnWater)) {
 			etc.getServer().getWorld(0).dropItem(block.getX(), block.getY(), block.getZ(), 79, 1, 0);
 		}
@@ -98,7 +90,7 @@ public class IceDropsListener extends PluginListener{
 	}
 	
 	public boolean isTool(int ToolID){
-		String[] allowedTools = IceDropsProps.getToolIds().split(",");
+		String[] allowedTools = ICP.getToolIds().split(",");
 		for(int i = 0; i < allowedTools.length; i++){
 			int AllowedID = -2;
 			try{

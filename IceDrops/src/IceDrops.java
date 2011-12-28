@@ -2,21 +2,22 @@ import java.util.logging.Logger;
 
 public class IceDrops extends Plugin{
 	String name = "IceDrops";
-	String version = "1.2";
+	String version = "1.3";
 	String author = "Darkdiplomat";
-	static Logger log = Logger.getLogger("Minecraft");
-  
-	public void initialize() {
-		IceDropsListener listener = new IceDropsListener();
-		etc.getLoader().addListener(PluginLoader.Hook.BLOCK_BROKEN, listener, this, PluginListener.Priority.MEDIUM);
-	}
+	Logger log = Logger.getLogger("Minecraft");
+	IceDropsProps ICP;
 
 	public void enable() {
-		IceDropsProps.loadIni();
-		log.info(this.name + " version " + this.version + " by " + this.author + " is enabled!");
+		ICP = new IceDropsProps();
+		log.info(name + " version " + version + " by " + author + " is enabled!");
 	}
 
 	public void disable() {
-		log.info(this.name + " version " + this.version + " is disabled!");
+		log.info(name + " version " + version + " is disabled!");
+	}
+	
+	public void initialize() {
+		IceDropsListener listener = new IceDropsListener(ICP);
+		etc.getLoader().addListener(PluginLoader.Hook.BLOCK_BROKEN, listener, this, PluginListener.Priority.MEDIUM);
 	}
 }
