@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 public class IceDrops extends Plugin{
 	String name = "IceDrops";
-	String version = "1.3.1";
+	String version = "1.3.2";
 	String author = "Darkdiplomat";
 	Logger log = Logger.getLogger("Minecraft");
 	IceDropsProps ICP;

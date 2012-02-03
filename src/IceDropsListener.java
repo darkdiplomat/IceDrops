@@ -54,27 +54,29 @@ public class IceDropsListener extends PluginListener{
 				if(RequireTool){
 					if(isTool(player.getItemInHand())){
 						if ((rperm) || (c2perm) || (cperm)){
-							drop(block);
+							return drop(block);
 						}else if((Realms == null) && (C2 == null) && (Cuboid == null)){
-							drop(block);
+							return drop(block);
 						}
 					}
 					else if(!SpawnWater){
 						if ((rperm) || (c2perm) || (cperm)){
 							block.setType(0);
 							block.update();
+							return true;
 						}
 						else if((Realms == null) && (C2 == null) && (Cuboid == null)){
 							block.setType(0);
 							block.update();
+							return true;
 						}
 					}
 				}
 				else{
 					if ((rperm) || (c2perm) || (cperm)){
-						drop(block);
+						return drop(block);
 					}else if(Realms == null && C2 == null && Cuboid == null){
-						drop(block);
+						return drop(block);
 					}
 				}
 			}
@@ -83,9 +85,11 @@ public class IceDropsListener extends PluginListener{
 					if ((rperm) || (c2perm) || (cperm)){
 						block.setType(0);
 						block.update();
+						return true;
 					}else if(Realms == null && C2 == null && Cuboid == null){
 						block.setType(0);
 						block.update();
+						return true;
 					}
 				}
 			}
@@ -93,7 +97,7 @@ public class IceDropsListener extends PluginListener{
 		return false;
 	}
 	
-	public void drop(Block block){
+	public boolean drop(Block block){
 		double drops = Math.random();
 		boolean SpawnWater = ICP.getNoWater();
 		double dropIceChance = ICP.getIceDrops();
@@ -104,11 +108,14 @@ public class IceDropsListener extends PluginListener{
 			block.getWorld().dropItem(block.getX(), block.getY(), block.getZ(), 79, 1, 0);
 			block.setType(0);
 			block.update();
+			return true;
 		}
 		else if (!SpawnWater) {
 			block.setType(0);
 			block.update();
+			return true;
 		}
+		return false;
 	}
 	
 	public boolean isTool(int ToolID){
