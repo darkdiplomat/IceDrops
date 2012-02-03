@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 
 /**
 * IceDrops v1.x
@@ -22,8 +28,24 @@
 
 public class IceDropsListener extends PluginListener{
 	IceDropsProps ICP;
-	public IceDropsListener(IceDropsProps ICP){
+	IceDrops ID;
+	public IceDropsListener(IceDropsProps ICP, IceDrops ID){
 		this.ICP = ICP;
+		this.ID = ID;
+	}
+	
+	public boolean onCommand(Player player, String[] cmd){
+		if(cmd[0].equals("/icedrops")){
+			player.sendMessage("§6----- §7IceDrops "+ID.version+" by §aDarkDiplomat §6-----");
+			if(!ID.isLatest()){
+				player.sendMessage("§6----- §7Update Availible: v"+getCurrentVer()+" §6-----");
+			}
+			else{
+				player.sendMessage("§6----- §7Latest Version is Installed§6 -----");
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean onBlockBreak(Player player, Block block){
@@ -133,4 +155,32 @@ public class IceDropsListener extends PluginListener{
 		}
 		return false;
 	}
+	
+	public String getCurrentVer(){
+		String address = "http://www.visualillusionsent.net/cmod_plugins/Versions.html";
+		String err = "§7Unable to retreive Current Version";
+		URL url = null;
+		try {
+			url = new URL(address);
+		} catch (MalformedURLException e) {
+			return err;
+		}
+		String Version = null;
+		String[] Vpre = new String[2];
+		BufferedReader in;
+		try {
+			in = new BufferedReader(new InputStreamReader(url.openStream()));
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				if (inputLine.contains("IceDrops=")){
+					Vpre = inputLine.split("=");
+					Version = Vpre[1].replace("</p>", "");
+				}
+			}
+			in.close();
+		} catch (IOException e) {
+			return err;
+		}
+		return Version;
+	} 
 }
